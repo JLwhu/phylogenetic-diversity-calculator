@@ -15,9 +15,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JRadioButton;
+import javax.swing.Timer;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -26,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.border.EtchedBorder;
 
 import pal.tree.SimpleTree;
+import phyloDiversityCalculator.phyloDiversityCalculatorProcessSubject.DISTANCE_STRATEGY;
 import phyloGeneticAnalysis.community.diversity.CommunityDiversityContext;
 import phyloGeneticAnalysis.community.diversity.NearestNeighborDistance;
 import phyloGeneticAnalysis.community.diversity.NearestNeighborPairwiseDistance;
@@ -35,7 +39,8 @@ import phyloGeneticAnalysis.community.diversity.UnifracDistance;
 import phyloGeneticAnalysis.community.diversity.UnifracDistance.UNIFRAC_VARIANTS;
 import phyloGeneticAnalysis.io.EnvFileIO;
 import phyloGeneticAnalysis.io.MatrixTxtFileIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
+import processListen.ProcessListener;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -74,7 +79,7 @@ class treFilter extends javax.swing.filechooser.FileFilter {
 	}
 }
 
-public class phyloDiversityCalculatorGUI {
+public class phyloDiversityCalculatorGUI extends javax.swing.JFrame{
 	protected static final org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger
 			.getLogger(phyloDiversityCalculatorGUI.class);
 
@@ -85,6 +90,8 @@ public class phyloDiversityCalculatorGUI {
 	private JTextField textFieldLocFile;
 	private JLabel lblChoosePhylogeneticTree;
 	private JLabel lblChooseOutputDistance;
+	private JLabel lblChooseOuputFile;
+	private JLabel lblResult;
 	private JRadioButton rdbtnUnifrac;
 	private JRadioButton rdbtnWeightedUnifrac;
 	private JRadioButton rdbtnNormWeightedUnifrac;
@@ -94,10 +101,17 @@ public class phyloDiversityCalculatorGUI {
 	private JRadioButton rdbtnSorensenIndex;
 	private JRadioButton rdbtnNearestNeighbor;
 	private JRadioButton rdbtnNearestNeighborPariwise;
+	private JTextField textField_Alpha;
+	private JPanel panelProgress;
+    private JProgressBar stepProgressBar;
+    private JTextArea processOutputTextArea;
 
 	private String phyloFilePath;
 	private String locFilePath;
-	private JTextField textField_Alpha;
+    private ProcessListener processListener;
+	private String lastS = "";
+	private boolean finished = false;
+
 
 	/**
 	 * Launch the application.
@@ -131,12 +145,13 @@ public class phyloDiversityCalculatorGUI {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 526, 455);
+		frame.setBounds(100, 100, 526, 520);
+		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		panel = new JPanel();
-		panel.setBounds(0, 0, 527, 432);
+		panel.setBounds(0, 0, 526, 500);
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
@@ -304,14 +319,30 @@ public class phyloDiversityCalculatorGUI {
 		textField_Alpha.setColumns(10);
 
 		lblChoosePhylogeneticTree = new JLabel(
-				"Choose Phylogenetic Tree File & Location File:");
-		lblChoosePhylogeneticTree.setBounds(6, 16, 344, 16);
+				"Step 1: Choose Phylogenetic Tree File & Location File:");
+		lblChoosePhylogeneticTree.setBounds(6, 16, 350, 16);
 		panel.add(lblChoosePhylogeneticTree);
 
-		lblChooseOutputDistance = new JLabel("Choose Output Distance Metrics:");
-		lblChooseOutputDistance.setBounds(6, 159, 234, 16);
+		lblChooseOutputDistance = new JLabel("Step 2: Choose Output Distance Metrics:");
+		lblChooseOutputDistance.setBounds(6, 159, 350, 16);
 		panel.add(lblChooseOutputDistance);
+		
+		lblChooseOuputFile = new JLabel("Step 3: Save to Matrix File:");
+		lblChooseOuputFile.setBounds(6, 397, 350, 16);
+		panel.add(lblChooseOuputFile);
+		
+	/*	lblResult = new JLabel("Progress:");
+		lblResult.setBounds(6, 473, 350, 16);
+		panel.add(lblResult);*/
 
+		JPanel panel_Step3 = new JPanel();
+		panel_Step3
+				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_Step3.setBounds(16, 419, 499, 40);
+		panel.add(panel_Step3);
+		panel_Step3.setLayout(null);
+		panel_Step3.setOpaque(false);
+		
 		JButton btnSaveDistanceMetrics = new JButton("Save Distance Metrics");
 		btnSaveDistanceMetrics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -331,103 +362,44 @@ public class phyloDiversityCalculatorGUI {
 						if (returnVal == outputFileChooser.APPROVE_OPTION) {
 							File file = outputFileChooser.getSelectedFile();
 							String outfilename = file.getAbsolutePath();
-							// Input Phylogenetic Tree
-							SimpleTree m_palTree;
-							newickFileIO nfio = new newickFileIO();
-							m_palTree = (SimpleTree) nfio
-									.inputNewickFile(phyloFilePath);
-
-							// Input Enviroment File
-							EnvFileIO envio = new EnvFileIO();
-							HashMap resultMap = envio.readEnvToMap(locFilePath);
-							ArrayList envList = (ArrayList) resultMap
-									.get("EnvList");
-							HashMap envNameToSpeciesSetMap = (HashMap) resultMap
-									.get("EnvToSpeciesMap");
-							HashMap envNameToSpeciesAbundanceMap = (HashMap) resultMap
-									.get("EnvNameToSpeciesAbundanceMap");
-
-							// Calculate the phylogenetic distance matrix
-							CommunityDiversityContext cdc;
+							int distanceStrategy;
+						
 							if (rdbtnUnifrac.isSelected()) {
-								UnifracDistance distanceStrategy = new UnifracDistance(
-										m_palTree);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
+								distanceStrategy=DISTANCE_STRATEGY.UNIFRAC_DU;
 							} else if (rdbtnWeightedUnifrac.isSelected()) {
-								UnifracDistance distanceStrategy = new UnifracDistance(
-										m_palTree);
-								distanceStrategy.setOption(UNIFRAC_VARIANTS.DW);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
+								distanceStrategy=DISTANCE_STRATEGY.UNIFRAC_DW;
 							} else if (rdbtnNormWeightedUnifrac.isSelected()) {
-								UnifracDistance distanceStrategy = new UnifracDistance(
-										m_palTree);
-								distanceStrategy.setOption(UNIFRAC_VARIANTS.D0);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
+								distanceStrategy=DISTANCE_STRATEGY.UNIFRAC_D0;
 							} else if (rdbtnVAWUnifrac.isSelected()) {
-								UnifracDistance distanceStrategy = new UnifracDistance(
-										m_palTree);
-								distanceStrategy
-										.setOption(UNIFRAC_VARIANTS.DVAW);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
+								distanceStrategy=DISTANCE_STRATEGY.UNIFRAC_DVAW;
 							} else if (rdbtnAlphaUnifrac.isSelected()) {
-								UnifracDistance distanceStrategy = new UnifracDistance(
-										m_palTree);
-								distanceStrategy
-										.setOption(UNIFRAC_VARIANTS.DALPHA);
+								distanceStrategy=DISTANCE_STRATEGY.UNIFRAC_DALPHA;
+							} else if (rdbtnPhyloSor.isSelected()) {
+								distanceStrategy=DISTANCE_STRATEGY.PhyloSor;
+							} else if (rdbtnSorensenIndex.isSelected()) {
+								distanceStrategy=DISTANCE_STRATEGY.SorensenIndex;
+							} else if (rdbtnNearestNeighbor.isSelected()) {
+								distanceStrategy=DISTANCE_STRATEGY.NearestNeighbor;
+							} else {
+								distanceStrategy=DISTANCE_STRATEGY.NearestNeighborPairwise;
+							}
+							
+							phyloDiversityCalculatorProcessSubject ps;
+							if (rdbtnAlphaUnifrac.isSelected()) {
 								double alpha = Double.valueOf(textField_Alpha
 										.getText());
-								distanceStrategy.setAlpha(alpha);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
-							} else if (rdbtnPhyloSor.isSelected()) {
-								PhyloSorDistance distanceStrategy = new PhyloSorDistance(
-										m_palTree);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
-							} else if (rdbtnSorensenIndex.isSelected()) {
-								SorensenIndexDistance distanceStrategy = new SorensenIndexDistance(
-										m_palTree);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
-							} else if (rdbtnNearestNeighbor.isSelected()) {
-								NearestNeighborDistance distanceStrategy = new NearestNeighborDistance(
-										m_palTree);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
-							} else {
-								NearestNeighborPairwiseDistance distanceStrategy = new NearestNeighborPairwiseDistance(
-										m_palTree);
-								cdc = new CommunityDiversityContext(
-										distanceStrategy);
-							}
+								ps = new phyloDiversityCalculatorProcessSubject(
+										phyloFilePath, locFilePath,
+										outfilename, distanceStrategy, alpha);
+							} else
+								ps = new phyloDiversityCalculatorProcessSubject(
+										phyloFilePath, locFilePath,
+										outfilename, distanceStrategy);
+							processListener = new ProcessListener(ps);
+							ps.attach(processListener);
+							ps.execute();
+							timer.start();
 
-							int envCount = envList.size();
-							double[][] distanceMatrix = new double[envCount][envCount];
-							for (int i = 0; i < envCount; i++) {
-								for (int j = i + 1; j < envCount; j++) {
-									Set<String> A = (Set<String>) envNameToSpeciesSetMap
-											.get(envList.get(i));
-									Set<String> B = (Set<String>) envNameToSpeciesSetMap
-											.get(envList.get(j));
-
-									HashMap speciesToAbundanceMap = (HashMap) envNameToSpeciesAbundanceMap
-											.get(envList.get(j));
-									
-
-									double distance = cdc.communityDiversity(A,
-											B, speciesToAbundanceMap);
-									distanceMatrix[i][j] = distance;
-								}
-							}
-
-							// output distance matrix
-							MatrixTxtFileIO matrixfile = new MatrixTxtFileIO();
-							matrixfile.saveMatrixFile(outfilename, envList,
-									distanceMatrix);
 						}
 					}
 				} catch (Exception ex) {
@@ -439,8 +411,40 @@ public class phyloDiversityCalculatorGUI {
 				}
 			}
 		});
-		btnSaveDistanceMetrics.setBounds(183, 397, 167, 29);
+		btnSaveDistanceMetrics.setBounds(180, 425, 167, 29);
 		panel.add(btnSaveDistanceMetrics);
+		
+	/*	panelProgress = new JPanel();
+		panelProgress
+		.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelProgress.setBounds(16, 495, 499, 40);
+		panel.add(panelProgress);*/
+
+		stepProgressBar = new JProgressBar(0,100);
+        stepProgressBar.setBounds(26, 471, 469, 20);
+        stepProgressBar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        panel.add(stepProgressBar);
 
 	}
+	
+	Timer timer = new Timer(1, new ActionListener() {
+        public void actionPerformed(ActionEvent evt) {
+            stepProgressBar.setValue(processListener.getCurrentPercentage());
+            String s = processListener.getCurrentMessage();
+            String newline = "\n";
+            if (s != null&& !s.equals(lastS)) {
+                lastS = s;
+        //        processOutputTextArea.append(s + newline);
+        //        processOutputTextArea.setCaretPosition(
+        //                processOutputTextArea.getDocument().getLength());
+            }
+            if (processListener.getCurrentPercentage() == 100) {
+                //    Toolkit.getDefaultToolkit().beep();
+                finished = true;
+                timer.stop();
+                setCursor(null); //turn off the wait cursor
+                stepProgressBar.setValue(stepProgressBar.getMinimum());
+            }
+        }
+    });
 }

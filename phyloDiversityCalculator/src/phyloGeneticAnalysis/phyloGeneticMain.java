@@ -14,8 +14,8 @@ import phyloGeneticAnalysis.Exception.nameFormatException;
 import phyloGeneticAnalysis.Util.RootedTreeSubtreeUtils;
 import phyloGeneticAnalysis.Util.TreeUtilsAdded;
 import phyloGeneticAnalysis.Util.speciesNameFormatUtils;
-import phyloGeneticAnalysis.io.csvFileIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.CsvFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 import web.service.impl.PalTreeServiceImpl;
 
 
@@ -48,11 +48,11 @@ public class phyloGeneticMain {
 
 		try {
 
-			newickFileIO nfio = new newickFileIO();
+			NewickFileIO nfio = new NewickFileIO();
 			m_palTree = (SimpleTree) nfio.inputNewickFile(treFileName);
 			res_subtree = (SimpleTree) nfio.inputNewickFile(restreFileName);
 
-			csvFileIO csvf = new csvFileIO();
+			CsvFileIO csvf = new CsvFileIO();
 
 			int i, count;
 		/*	scientificNameList = csvf.readCSVcolumn(csvFile, 0, false);

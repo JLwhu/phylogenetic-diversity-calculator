@@ -20,7 +20,7 @@ import phyloGeneticAnalysis.community.diversity.CommunityDiversityContext;
 import phyloGeneticAnalysis.community.diversity.UnifracDistance;
 import phyloGeneticAnalysis.community.diversity.UnifracDistanceNormalized_Max;
 import phyloGeneticAnalysis.io.ArffIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 import web.exception.DaoException;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -37,7 +37,7 @@ public class CommunityDiscoveryMain {
 		int kmeansVairant = KMEANS_VARIANTS.SKME;   //Option 1: SKME; Option 2: SKMENVC; Option 3: SKMEVCG.
 		FileWriter fout = null;
 		try {
-			newickFileIO nfio = new newickFileIO();
+			NewickFileIO nfio = new NewickFileIO();
 			SimpleTree m_palTree;
 			m_palTree = (SimpleTree) nfio.inputNewickFile(treFileName);
 			ArffIO arffio = new ArffIO();

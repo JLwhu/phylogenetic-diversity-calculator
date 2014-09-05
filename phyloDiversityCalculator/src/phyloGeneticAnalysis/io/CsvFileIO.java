@@ -23,7 +23,7 @@ import au.com.bytecode.opencsv.CSVWriter;
  */
 
 
-public class csvFileIO {
+public class CsvFileIO {
 	
 
 	/**
