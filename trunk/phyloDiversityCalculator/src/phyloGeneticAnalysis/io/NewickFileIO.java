@@ -21,7 +21,7 @@ import pal.tree.TreeParseException;
 /**
  * The Class newickFileIO.
  */
-public class newickFileIO {
+public class NewickFileIO {
 	
 	/**
 	 * Input newick file.

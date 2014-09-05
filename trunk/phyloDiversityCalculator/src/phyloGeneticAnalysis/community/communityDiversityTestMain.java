@@ -34,8 +34,8 @@ import phyloGeneticAnalysis.community.diversity.UnifracDistanceNormalized_Random
 import phyloGeneticAnalysis.community.diversity.treeUtil.TreeUtilsMore;
 import phyloGeneticAnalysis.io.ArffIO;
 import phyloGeneticAnalysis.io.EnvFileIO;
-import phyloGeneticAnalysis.io.csvFileIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.CsvFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 import web.service.impl.PalTreeServiceImpl;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -70,7 +70,7 @@ public class communityDiversityTestMain {
 			ArffIO arffio = new ArffIO();
 			Instances regions = arffio.readArff(filename);
 
-			newickFileIO nfio = new newickFileIO();
+			NewickFileIO nfio = new NewickFileIO();
 			m_palTree = (SimpleTree) nfio.inputNewickFile(treFileName);
 
 

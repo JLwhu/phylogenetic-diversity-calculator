@@ -20,7 +20,7 @@ import phyloGeneticAnalysis.community.diversity.UnifracDistanceNormalized_Max;
 import phyloGeneticAnalysis.community.diversity.UnifracDistanceNormalized_Random;
 import phyloGeneticAnalysis.community.diversity.treeUtil.TreeUtilsMore;
 import phyloGeneticAnalysis.community.topologyGeneration.TreeTopolgyGenerator;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 
 public class UnifracTopologyTestMain {
 	public static void main(String[] args) {

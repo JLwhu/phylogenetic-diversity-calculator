@@ -22,8 +22,8 @@ import pal.tree.SimpleTree;
 import pal.tree.Tree;
 import pal.tree.TreeParseException;
 import phyloGeneticAnalysis.io.ArffIO;
-import phyloGeneticAnalysis.io.csvFileIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.CsvFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 
 import web.dao.MongoSpeciesNameDao;
 import web.dao.MongoSpeciesSpotRecordDao;
@@ -56,7 +56,7 @@ public class RegionSpeciesInstancesRetrievalMain {
 		SimpleTree m_palTree;
 		FileWriter fout = null;
 		
-		newickFileIO nfio = new newickFileIO();
+		NewickFileIO nfio = new NewickFileIO();
 		try {
 			m_palTree = (SimpleTree) nfio.inputNewickFile(treFileName);
 			RegionSpeciesInstancesRetrievalMain cd = new RegionSpeciesInstancesRetrievalMain();

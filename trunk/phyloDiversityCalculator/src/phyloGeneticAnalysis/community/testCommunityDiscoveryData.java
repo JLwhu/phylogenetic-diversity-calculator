@@ -13,7 +13,7 @@ import phyloGeneticAnalysis.community.discovery.CommunityDiscoveryContext;
 import phyloGeneticAnalysis.community.discovery.KMeansClustering;
 import phyloGeneticAnalysis.community.diversity.UnifracDistance;
 import phyloGeneticAnalysis.io.ArffIO;
-import phyloGeneticAnalysis.io.newickFileIO;
+import phyloGeneticAnalysis.io.NewickFileIO;
 import phyloGeneticAnalysis.statistics.InstancesStatistics;
 import weka.core.Instances;
 
@@ -27,7 +27,7 @@ public class testCommunityDiscoveryData {
 		int iteration =500;
 		FileWriter fout = null;
 		try {
-			newickFileIO nfio = new newickFileIO();
+			NewickFileIO nfio = new NewickFileIO();
 			SimpleTree m_palTree;
 			m_palTree = (SimpleTree) nfio.inputNewickFile(treFileName);
 			ArffIO arffio = new ArffIO();
