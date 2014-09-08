@@ -109,6 +109,24 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 
 		Instance instanceA = getInstanceFromNodeNameSet(tree, A, abundanceMap);
 		Instance instanceB = getInstanceFromNodeNameSet(tree, B, abundanceMap);
+		
+		boolean isANonEmpty = false;
+		boolean isBNonEmpty = false;
+		for (int i=0;i<instanceA.numAttributes();i++){
+			if (instanceA.value(i)>0){
+				isANonEmpty = true;
+				break;
+			}
+		}
+		for (int i=0;i<instanceB.numAttributes();i++){
+			if (instanceB.value(i)>0){
+				isBNonEmpty = true;
+				break;
+			}
+		}
+		
+		if (!isANonEmpty || !isBNonEmpty)
+			return 0;
 
 		// double unifrac = getTreeUnifrac(tree, instanceA, instanceB,option);
 		// // subtree
@@ -127,6 +145,9 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	@Override
 	public double distance(Set<String> A, Set<String> B) {
 		Tree tree = this.getPhylogeneticTree();
+		
+		if(A.isEmpty()||B.isEmpty())
+			return 0;
 
 		Instance instanceA = getInstanceFromNodeNameSet(tree, A);
 		Instance instanceB = getInstanceFromNodeNameSet(tree, B);
@@ -147,6 +168,25 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 */
 	//@Override
 	public double distance1(Instance first, Instance second) {
+		
+		boolean isANonEmpty = false;
+		boolean isBNonEmpty = false;
+		for (int i=0;i<first.numAttributes();i++){
+			if (first.value(i)>0){
+				isANonEmpty = true;
+				break;
+			}
+		}
+		for (int i=0;i<second.numAttributes();i++){
+			if (second.value(i)>0){
+				isBNonEmpty = true;
+				break;
+			}
+		}
+		
+		if (!isANonEmpty || !isBNonEmpty)
+			return 0;
+		
 		Tree tree = this.getPhylogeneticTree();
 
 		double expectBound = 1;
@@ -536,6 +576,25 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	
 	@Override
 	public double distance(Instance first, Instance second){//zscoreDistance
+		
+		boolean isANonEmpty = false;
+		boolean isBNonEmpty = false;
+		for (int i=0;i<first.numAttributes();i++){
+			if (first.value(i)>0){
+				isANonEmpty = true;
+				break;
+			}
+		}
+		for (int i=0;i<second.numAttributes();i++){
+			if (second.value(i)>0){
+				isBNonEmpty = true;
+				break;
+			}
+		}
+		
+		if (!isANonEmpty || !isBNonEmpty)
+			return 0;
+		
 		double distance = distance1(first, second);;
 		double mean = 0;
 		double std = 0;
