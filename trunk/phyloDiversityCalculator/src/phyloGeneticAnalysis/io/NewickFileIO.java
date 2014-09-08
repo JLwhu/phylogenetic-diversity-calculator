@@ -114,5 +114,38 @@ public class NewickFileIO {
 		
 	}
 	
+	/**
+	 * Output Multiple tree to one newick file.
+	 *
+	 * @param tree the tree
+	 * @param outFileName the out file name
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws TreeParseException the tree parse exception
+	 */
+	public void outputMultipleNewickFile(List treelist, String outFileName) throws IOException, TreeParseException {
+
+		PrintWriter pw = null;
+		try {
+			File destinationDir;
+			destinationDir = new File(outFileName.substring(0,
+					outFileName.lastIndexOf("\\")));
+			if (!destinationDir.exists())
+				destinationDir.mkdir();
+			pw = new PrintWriter(outFileName);
+			
+			for (int i = 0;i<treelist.size();i++){
+				SimpleTree tree = (SimpleTree) treelist.get(i);
+				String newick = PalTreeUtils.palToNewick((SimpleTree) tree);
+				pw.printf(newick);
+				pw.printf("\r\n");
+			}
+				
+		} finally {
+			if (pw != null)
+				pw.close();
+		}
+		
+	}
+	
 
 }
