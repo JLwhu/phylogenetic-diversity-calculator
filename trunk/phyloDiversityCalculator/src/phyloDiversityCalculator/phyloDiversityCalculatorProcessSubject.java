@@ -26,28 +26,16 @@ public class phyloDiversityCalculatorProcessSubject extends ProcessSubject {
 	
 
 	public class DISTANCE_STRATEGY {
-
 	public static final int UNIFRAC_DU = 1;
-
 	public static final int UNIFRAC_DW = 2;
-
 	public static final int UNIFRAC_D0 = 3;
-
 	public static final int UNIFRAC_DALPHA = 4;
-
-	public static final int UNIFRAC_DVAW = 5;
-	
+	public static final int UNIFRAC_DVAW = 5;	
 	public static final int PhyloSor = 6;
-
 	public static final int SorensenIndex = 7;
-
 	public static final int NearestNeighbor = 8;
-
 	public static final int NearestNeighborPairwise = 9;
-
-	
-	
-}
+	}
 	
 	phyloDiversityCalculatorProcessSubject(String phyloFilePath,
 			String locFilePath, String outfilename, int distanceStrategy) {
@@ -77,8 +65,13 @@ public class phyloDiversityCalculatorProcessSubject extends ProcessSubject {
         setCurrentMessage("Input Phylogenetic Tree ...");
 		SimpleTree m_palTree;
 		NewickFileIO nfio = new NewickFileIO();
+		
+		
+	//	ArrayList abc = (ArrayList) nfio.inputMultipleNewickFile(phyloFilePath);
+		
 		m_palTree = (SimpleTree) nfio
 				.inputNewickFile(phyloFilePath);
+
 		
 		progressvalue += 2;
 		setCurrentPercentage(progressvalue);

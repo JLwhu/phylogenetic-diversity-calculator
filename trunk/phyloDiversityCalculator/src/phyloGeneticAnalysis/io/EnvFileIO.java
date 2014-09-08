@@ -18,7 +18,7 @@ import java.util.TreeMap;
 import pal.tree.Tree;
 import weka.core.Instance;
 
-public class EnvFileIO {
+public class EnvFileIO extends Parser{
 	public HashMap readEnvToMap(String filename)throws IOException {
 		HashMap returnMap = new HashMap();
 		List speEnvList = readEnv(filename);
@@ -86,34 +86,27 @@ public class EnvFileIO {
 
 		String line = "";
 		line = reader.readLine();
-		Set seperator = new HashSet();
-		seperator.add("\t");
-		seperator.add(" ");
-		seperator.add("\r");
-		seperator.add("\r\n");
 		while (line != null && line != "") { // && i<10
 			int idx = 0;
-			while (idx<line.length()&&seperator.contains(line.substring(idx, idx+1)))
-				idx++;
+			int startIdx = idx;
+			int endIdx = idx;
 			String speName ="";
-			while (idx<line.length()&&!seperator.contains(line.substring(idx, idx+1))){
-				speName+= line.substring(idx, idx+1);
-				idx++;
-			}
-			while (idx<line.length()&&seperator.contains(line.substring(idx, idx+1)))
-				idx++;	
+			startIdx = skipBlanks(idx, line);
+			endIdx = getNextWordEndidx(startIdx, line);
+			speName = line.substring(startIdx,endIdx);
+			
 			String envName ="";
-			while (idx<line.length()&&!seperator.contains(line.substring(idx, idx+1))){
-				envName+= line.substring(idx, idx+1);
-				idx++;
-			}
-			while (idx<line.length()&&seperator.contains(line.substring(idx, idx+1)))
-				idx++;	
-			String abundance = "";
-			while (idx<line.length()&&!seperator.contains(line.substring(idx, idx+1))){
-				abundance+= line.substring(idx, idx+1);
-				idx++;
-			}
+			idx = endIdx;
+			startIdx = skipBlanks(idx, line);
+			endIdx = getNextWordEndidx(startIdx, line);
+			envName = line.substring(startIdx,endIdx);
+
+			String abundance ="";
+			idx = endIdx;
+			startIdx = skipBlanks(idx, line);
+			endIdx = getNextWordEndidx(startIdx, line);
+			abundance = line.substring(startIdx,endIdx);
+			
 			line = reader.readLine();
 			if (abundance.isEmpty())
 				speEnvList.add(speName+"@"+envName);

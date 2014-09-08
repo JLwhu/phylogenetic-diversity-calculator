@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import pal.tree.SimpleTree;
@@ -75,6 +76,41 @@ public class NewickFileIO {
 			if (pw != null)
 				pw.close();
 		}
+		
+	}
+	
+	/**
+	 * Input multiple newick file.
+	 *
+	 * @param inFileName the in file name
+	 * @return the tree
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws TreeParseException the tree parse exception
+	 */
+	public List inputMultipleNewickFile(String inFileName) throws IOException, TreeParseException {
+		Tree ret_tree = null;
+		BufferedReader br = null;
+		
+		List treeList = new ArrayList();
+		
+		try {
+			br = new BufferedReader(new FileReader(inFileName));
+			String newick = "";
+			String line;
+
+			while ((line = br.readLine()) != null) {
+				newick = line;
+				if (line.length() > 0) {
+					ret_tree = PalTreeUtils.newickToPal(newick);
+					treeList.add(ret_tree);
+				}
+			}
+			
+		} finally {
+			if (br != null)
+				br.close();
+		}
+		return treeList;
 		
 	}
 	
