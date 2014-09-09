@@ -73,7 +73,7 @@ public class SequenceIDFileIO extends Parser{
 		return result;
 	}
 	
-	public void saveSequenceIDFile(String outfilename, ArrayList resultList) throws IOException {
+	public void saveSequenceIDFile(String outfilename,List resultList) throws IOException {
 		FileWriter fout = null;
 		fout = new FileWriter(outfilename);
 		
