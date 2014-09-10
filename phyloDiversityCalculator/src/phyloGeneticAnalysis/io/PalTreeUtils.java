@@ -20,7 +20,7 @@ import pal.tree.*;
  * This class isn't public because user's of our util library should not "see"
  * the pal library.
  */
-class PalTreeUtils
+public class PalTreeUtils
 {
 	public static pal.tree.SimpleTree newickToPal(final String newickTree) throws TreeParseException
 	{

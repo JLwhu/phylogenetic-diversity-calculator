@@ -25,6 +25,7 @@ public class SequenceIDFileIO extends Parser{
 		String line = "";
 		line = reader.readLine();
 		int idx = 0;
+		idx = getNextWordEndidx(idx, line);
 		while (idx< line.length()){
 			int startIdx = idx;
 			int endIdx = idx;
@@ -44,7 +45,7 @@ public class SequenceIDFileIO extends Parser{
 			String speName ="";
 			startIdx = skipBlanks(idx, line);
 			endIdx = getNextWordEndidx(startIdx, line);
-			idx = endIdx;
+			idx = endIdx+1;
 
 			speName = line.substring(startIdx,endIdx);	
 			speList.add(speName);
@@ -59,7 +60,9 @@ public class SequenceIDFileIO extends Parser{
 					String geneID = line.substring(startIdx,endIdx);
 					geneNameToIDMap.put(geneNameList.get(i), geneID);
 				}
+				idx++;
 			}
+			line = reader.readLine();
 			
 		}
 		
@@ -93,8 +96,9 @@ public class SequenceIDFileIO extends Parser{
 			for (int j = 0; j < geneNameList.size(); j++) {
 				fout.write("\t");
 				String geneName = (String) geneNameList.get(j);
-				if (speToGeneIDMap.containsKey(geneName))
-					fout.write((String)speToGeneIDMap.get(geneName));
+				HashMap geneIDMap = (HashMap) speToGeneIDMap.get(speList.get(i));
+				if (geneIDMap.containsKey(geneName))
+					fout.write((String)geneIDMap.get(geneName));
 			}
 			fout.write("\r\n");
 		}
