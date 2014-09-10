@@ -37,20 +37,33 @@ public class PhyloSorDistance extends CommunityDiversityDistanceStrategy{
 		RootedTreeSubtreeUtils rtsu = new RootedTreeSubtreeUtils();
 		
 		double intersectSum = 0;
-		int incount = tree.getInternalNodeCount();
-		for (int i=0;i<incount;i++){
-			Node node = tree.getInternalNode(i);
-			double anum = TreeUtilsMore.getCommonNodeNumberUnderNode(node, nodesetA);
-			double bnum = TreeUtilsMore.getCommonNodeNumberUnderNode(node, nodesetB);
-			if (anum>0 && bnum>0)
-				intersectSum += node.getBranchLength();
+		Set internalNodes = TreeUtilsMore.getCommonInternalNodeIDSet(nodesetA,nodesetB);
+		Iterator it = internalNodes.iterator();
+		while(it.hasNext()){
+			Integer nodeID = (Integer) it.next();
+			Node node = tree.getInternalNode(nodeID.intValue());
+			intersectSum+=node.getBranchLength();
 		}
 		
-		Iterator it = intersect.iterator();
-		while (it.hasNext()){
-			Node node  = (Node)it.next();
-			intersectSum += node.getBranchLength();
+		it = intersect.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			intersectSum+=node.getBranchLength();
 		}
+		
+	/*	int incount = tree.getInternalNodeCount();
+		for (int i=0;i<incount;i++){ // incount
+			Node node = tree.getInternalNode(i);
+			if (!node.isRoot()) {
+				double anum = TreeUtilsMore.getCommonNodeNumberUnderNode(node,
+						nodesetA);
+				double bnum = TreeUtilsMore.getCommonNodeNumberUnderNode(node,
+						nodesetB);
+				if (anum > 0 && bnum > 0)
+					intersectSum += node.getBranchLength();
+			}
+		}*/
+
 		
 		SimpleTree subtreeA = (SimpleTree) rtsu.getSpecifiedSubTree(
 				this.getPhylogeneticTree(), A);
@@ -75,8 +88,9 @@ public class PhyloSorDistance extends CommunityDiversityDistanceStrategy{
 
 	@Override
 	public double distance(Set<String> A, Set<String> B, HashMap abundanceMap) {
-		// TODO Auto-generated method stub
-		return 0;
+		double distance = distance(A,B);
+		
+		return distance;
 	}	
 
 }

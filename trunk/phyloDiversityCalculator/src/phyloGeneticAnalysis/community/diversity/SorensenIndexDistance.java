@@ -43,8 +43,9 @@ public class SorensenIndexDistance extends
 
 	@Override
 	public double distance(Set<String> A, Set<String> B, HashMap abundanceMap) {
-		// TODO Auto-generated method stub
-		return 0;
+		double distance = distance(A,B);
+		
+		return distance;
 	}
 
 }
