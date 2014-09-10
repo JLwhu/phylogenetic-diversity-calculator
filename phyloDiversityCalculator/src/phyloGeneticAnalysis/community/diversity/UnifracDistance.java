@@ -166,8 +166,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 * phyloGeneticAnalysis.community.diversity.CommunityDiversityDistanceStrategy
 	 * #distance(weka.core.Instance, weka.core.Instance)
 	 */
-	//@Override
-	public double distance1(Instance first, Instance second) {
+	@Override
+	public double distance(Instance first, Instance second) {
 		
 		boolean isANonEmpty = false;
 		boolean isBNonEmpty = false;
@@ -574,8 +574,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 		return sums;
 	}
 	
-	@Override
-	public double distance(Instance first, Instance second){//zscoreDistance
+	//@Override
+	public double distance1(Instance first, Instance second){//zscoreDistance
 		
 		boolean isANonEmpty = false;
 		boolean isBNonEmpty = false;

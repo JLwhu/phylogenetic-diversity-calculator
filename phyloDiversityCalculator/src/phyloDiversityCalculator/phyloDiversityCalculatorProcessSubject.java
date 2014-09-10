@@ -173,10 +173,10 @@ public class phyloDiversityCalculatorProcessSubject extends ProcessSubject {
 
 				
 			}
-		}
-		
+		}		
 		
 
+		System.out.println("Output distance matrix ...");
 		// output distance matrix
         setCurrentMessage("Output distance matrix ...");
 		MatrixTxtFileIO matrixfile = new MatrixTxtFileIO();
@@ -187,6 +187,7 @@ public class phyloDiversityCalculatorProcessSubject extends ProcessSubject {
 		setCurrentPercentage(progressvalue);
 
 
+		System.out.println("End Saving Matrix to File. \r\nDone!");
         setCurrentPercentage(100);
         setCurrentMessage("End Saving Matrix to File. \r\nDone!");
         return distanceMatrix;

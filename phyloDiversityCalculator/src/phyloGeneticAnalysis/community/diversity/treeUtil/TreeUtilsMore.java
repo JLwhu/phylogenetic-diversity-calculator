@@ -10,6 +10,7 @@ import java.util.Queue;
 import java.util.Set;
 
 import pal.tree.Node;
+import pal.tree.SimpleTree;
 import pal.tree.Tree;
 import weka.core.Instance;
 
@@ -96,6 +97,44 @@ public class TreeUtilsMore {
 		ret = intersection.size();
 		
 		return ret;
+	}
+	
+	/**
+	 * returns the set of intersection of internal nodes Set A and B.
+	 *
+	 * @param Set<Node> A
+	 * @param Set<Node> B
+	 * @return the common node number under node
+	 */
+	public static Set getCommonInternalNodeIDSet(Set<Node> A,Set<Node> B){
+		Set<Integer> internaleNodeSetA = new HashSet<Integer>();
+		Set<Integer> internaleNodeSetB = new HashSet<Integer>();
+		
+		Iterator it = A.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			while (!node.isRoot()){
+				node = node.getParent();
+				internaleNodeSetA.add(node.getNumber());
+			}
+		}
+		
+		it = B.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			while (!node.isRoot()){
+				node = node.getParent();
+				internaleNodeSetB.add(node.getNumber());
+			}
+		}
+		
+		Set intersection = new HashSet<Integer>();
+		
+		intersection.clear();
+		intersection.addAll(internaleNodeSetA);
+		intersection.retainAll(internaleNodeSetB);
+		
+		return intersection;
 	}
 	
 	/**
