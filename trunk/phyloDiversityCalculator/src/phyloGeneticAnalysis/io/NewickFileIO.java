@@ -65,11 +65,11 @@ public class NewickFileIO {
 		String newick = PalTreeUtils.palToNewick((SimpleTree) tree);
 		PrintWriter pw = null;
 		try {
-			File destinationDir;
+	/*		File destinationDir;
 			destinationDir = new File(outFileName.substring(0,
 					outFileName.lastIndexOf("\\")));
 			if (!destinationDir.exists())
-				destinationDir.mkdir();
+				destinationDir.mkdir();*/
 			pw = new PrintWriter(outFileName);
 			pw.printf(newick);
 		} finally {
@@ -110,8 +110,7 @@ public class NewickFileIO {
 			if (br != null)
 				br.close();
 		}
-		return treeList;
-		
+		return treeList;		
 	}
 	
 	/**
@@ -126,11 +125,11 @@ public class NewickFileIO {
 
 		PrintWriter pw = null;
 		try {
-			File destinationDir;
+		/*	File destinationDir;
 			destinationDir = new File(outFileName.substring(0,
 					outFileName.lastIndexOf("\\")));
 			if (!destinationDir.exists())
-				destinationDir.mkdir();
+				destinationDir.mkdir(); */
 			pw = new PrintWriter(outFileName);
 			
 			for (int i = 0;i<treelist.size();i++){
@@ -143,8 +142,7 @@ public class NewickFileIO {
 		} finally {
 			if (pw != null)
 				pw.close();
-		}
-		
+		}		
 	}
 	
 
