@@ -28,11 +28,11 @@ TechnicalInformationHandler{
 	CommunityDiversityDistanceStrategy(Tree phylotree){
 		setPhylogeneticTree(phylotree);
 	}
-	abstract public double distance(Set<String> A, Set<String> B);
+	abstract public double distance(Set<String> A, Set<String> B) throws Exception;
 	
 	abstract public double distance(Instance first, Instance second);
 	
-	abstract public double distance(Set<String> A, Set<String> B, HashMap abundanceMap);
+	abstract public double distance(Set<String> A, Set<String> B, HashMap abundanceMap) throws Exception;
 
 	protected Set<Node> getNodeSetFromNameSet(Tree tree, Set<String> nameSet){		
 		Set<Node> nodeSet = new HashSet<Node>();

@@ -8,7 +8,7 @@ import java.util.List;
 import pal.tree.Tree;
 
 public class GeneSequenceUtil {
-	public HashMap getSpecifiedSpeciesNameToSequenceMap(HashMap sequenceMap, List nameList) {
+	public HashMap getSpecifiedSpeciesNameToSequenceMap(HashMap sequenceMap, List nameList)  throws Exception{
 		HashMap subSeqMap = new HashMap();
 		Iterator it = nameList.iterator();
 		while (it.hasNext()) {
@@ -22,7 +22,7 @@ public class GeneSequenceUtil {
 	}
 	
 	
-	public List getSpecifiedSpeiceNameToGeneIDMap(List speciesToSequenceIDList, List nameList) {
+	public List getSpecifiedSpeiceNameToGeneIDMap(List speciesToSequenceIDList, List nameList)  throws Exception{
 		ArrayList speList = (ArrayList) speciesToSequenceIDList.get(0);
 		ArrayList geneNameList = (ArrayList) speciesToSequenceIDList.get(1);
 		HashMap speToGeneIDMap = (HashMap) speciesToSequenceIDList.get(2);

@@ -27,7 +27,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the brachlength sum
 	 */
-	public static double getBrachlengthSum(Tree tree){
+	public static double getBrachlengthSum(Tree tree) throws Exception{
 		double sum=0;
 		int inNodeCount = tree.getInternalNodeCount();
 		for (int i=0;i<inNodeCount;i++){
@@ -49,7 +49,7 @@ public class TreeUtilsMore {
 	 *
 	 * @param tree the new brachlength to one
 	 */
-	public static void setBrachlengthToOne(Tree tree){
+	public static void setBrachlengthToOne(Tree tree) throws Exception{
 	//	double sum=0;
 		int inNodeCount = tree.getInternalNodeCount();
 		for (int i=0;i<inNodeCount;i++){
@@ -72,7 +72,7 @@ public class TreeUtilsMore {
 	 * @param set the set
 	 * @return the common node number under node
 	 */
-	public static double getCommonNodeNumberUnderNode(Node node, Set<Node> set){
+	public static double getCommonNodeNumberUnderNode(Node node, Set<Node> set) throws Exception{
 		int ret = 0;
 		Set<Node> externalnodeSet = new HashSet<Node>();
 		
@@ -106,7 +106,7 @@ public class TreeUtilsMore {
 	 * @param Set<Node> B
 	 * @return the common node number under node
 	 */
-	public static Set getCommonInternalNodeIDSet(Set<Node> A,Set<Node> B){
+	public static Set getCommonInternalNodeIDSet(Set<Node> A,Set<Node> B) throws Exception{
 		Set<Integer> internaleNodeSetA = new HashSet<Integer>();
 		Set<Integer> internaleNodeSetB = new HashSet<Integer>();
 		
@@ -143,7 +143,7 @@ public class TreeUtilsMore {
 	 * @param Set<Node> A
 	 * @return the common node number under node
 	 */
-	public static Set getInternalNodeIDSet(Set<Node> A){
+	public static Set getInternalNodeIDSet(Set<Node> A) throws Exception{
 		Set<Integer> internaleNodeSetA = new HashSet<Integer>();
 		
 		Iterator it = A.iterator();
@@ -166,7 +166,7 @@ public class TreeUtilsMore {
 	 * @param instance the instance
 	 * @return the common node number under node
 	 */
-	public static int[] getCommonNodeIdxUnderNode(Tree tree, Node node, Instance instance){
+	public static int[] getCommonNodeIdxUnderNode(Tree tree, Node node, Instance instance) throws Exception{
 		Set<Node> externalnodeSet = new HashSet<Node>();
 		
 		Queue<Node> queue = new LinkedList<Node>();
@@ -201,7 +201,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the sorted branch weight
 	 */
-	public static double[] getSortedBranchWeight(Tree tree){
+	public static double[] getSortedBranchWeight(Tree tree) throws Exception{
 
 		int inNodeCount = tree.getInternalNodeCount();
 		int exNodeCount = tree.getExternalNodeCount();
@@ -224,7 +224,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the branch weight
 	 */
-	public static double[] getBranchWeight(Tree tree){
+	public static double[] getBranchWeight(Tree tree) throws Exception{
 
 		int inNodeCount = tree.getInternalNodeCount();
 		int exNodeCount = tree.getExternalNodeCount();
@@ -250,7 +250,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the tree balance value
 	 */
-	public static double getTreeBalanceValue(Tree tree) {
+	public static double getTreeBalanceValue(Tree tree)  throws Exception{
 		Set[] leftNodesSet = new Set[tree.getInternalNodeCount()];
 		Set[] rightNodesSet = new Set[tree.getInternalNodeCount()];
 
@@ -326,7 +326,7 @@ public class TreeUtilsMore {
 	 * @return the tree weighted balance value
 	 */
 	
-	public static double getTreeWeightedBalanceValue(Tree tree) {
+	public static double getTreeWeightedBalanceValue(Tree tree)  throws Exception{
 		double[] leftNodesWeight = new double[tree.getInternalNodeCount()];
 		double[] rightNodesWeight = new double[tree.getInternalNodeCount()];
 
@@ -387,7 +387,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the tree weighted balance value cascade
 	 */
-	public static double getTreeWeightedBalanceValueCascade(Tree tree) {
+	public static double getTreeWeightedBalanceValueCascade(Tree tree)  throws Exception{
 		double sum = getNodeWeightedBalanceValue(tree.getRoot());
 		return sum;
 	}
@@ -420,7 +420,7 @@ public class TreeUtilsMore {
 	 * @param tree the tree
 	 * @return the tree root to leaf path lengths variance
 	 */
-	public static double getTreeRootToLeafPathLengthsVariance(Tree tree) {
+	public static double getTreeRootToLeafPathLengthsVariance(Tree tree)  throws Exception{
 		double[] pathLengths = new double[tree.getExternalNodeCount()];
 
 		for (int i = 0; i < tree.getExternalNodeCount(); i++) {

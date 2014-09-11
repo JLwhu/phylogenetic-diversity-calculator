@@ -18,7 +18,7 @@ public class RootedTreeSubtreeIOUtils extends RootedTreeSubtreeUtils{
 
 	public void inputNewickFileExtractSubtreeAndOuputNewickFile(
 			String inFileName, String outFileName, List speciesNameList)
-			throws IOException, TreeParseException {
+			throws Exception {
 		Tree ret_tree = null;
 		BufferedReader br = null;
 		PrintWriter pw = null;

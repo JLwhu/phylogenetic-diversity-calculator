@@ -7,6 +7,10 @@ import java.util.Set;
 
 
 
+
+
+
+
 import pal.tree.Node;
 import pal.tree.SimpleTree;
 import pal.tree.Tree;
@@ -24,7 +28,7 @@ public class PhyloSorDistance extends CommunityDiversityDistanceStrategy{
 
 	@Override
 	public double distance(Set<String> A,
-			Set<String> B) {	
+			Set<String> B)  throws Exception{	
 		Tree tree = this.getPhylogeneticTree();
 		Set<Node> nodesetA = getNodeSetFromNameSet(tree, A);
 		Set<Node> nodesetB = getNodeSetFromNameSet(tree, B);
@@ -111,13 +115,19 @@ public class PhyloSorDistance extends CommunityDiversityDistanceStrategy{
 		Tree tree = this.getPhylogeneticTree();
 		Set<String> A = getNodeNameSetFromInstance(tree,first);
 		Set<String> B = getNodeNameSetFromInstance(tree,second);
-		double distance = distance(A,B);
+		double distance=0;
+		try {
+			distance = distance(A,B);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return distance;
 	}
 
 	@Override
-	public double distance(Set<String> A, Set<String> B, HashMap abundanceMap) {
+	public double distance(Set<String> A, Set<String> B, HashMap abundanceMap)  throws Exception{
 		double distance = distance(A,B);
 		
 		return distance;

@@ -31,7 +31,7 @@ public class RootedTreeSubtreeUtils {
 	 * @param nameList the name list
 	 * @return the specified sub tree
 	 */
-	public Tree getSpecifiedSubTree(Tree tree, List nameList) {
+	public Tree getSpecifiedSubTree(Tree tree, List nameList) throws Exception{
 		Tree subtree = null;
 		int i,count;
 
@@ -78,7 +78,7 @@ public class RootedTreeSubtreeUtils {
 	 * @param NodeSet the Node name Set
 	 * @return the specified sub tree
 	 */
-	public Tree getSpecifiedSubTree(Tree tree, Set<String> nameSet) {
+	public Tree getSpecifiedSubTree(Tree tree, Set<String> nameSet)  throws Exception{
 		Tree subtree = null;
 
 		List<String> namelist = new ArrayList<String>();
@@ -99,7 +99,7 @@ public class RootedTreeSubtreeUtils {
 	 * @param IDXSet the index Set
 	 * @return the specified sub tree
 	 */
-	public Tree getSpecifiedSubTreeByIDXSet(Tree tree, Set<Integer> IDXSet) {
+	public Tree getSpecifiedSubTreeByIDXSet(Tree tree, Set<Integer> IDXSet)  throws Exception{
 		Tree subtree = null;
 
 		List<String> namelist = new ArrayList<String>();
@@ -120,7 +120,7 @@ public class RootedTreeSubtreeUtils {
 	 * @param NodeSet the Node Set
 	 * @return the specified sub tree
 	 */
-	public Tree getSpecifiedSubTreeByNodeSet(Tree tree, Set<Node> NodeSet) {
+	public Tree getSpecifiedSubTreeByNodeSet(Tree tree, Set<Node> NodeSet)  throws Exception{
 		Tree subtree = null;
 
 		List<String> namelist = new ArrayList<String>();
@@ -171,7 +171,7 @@ public class RootedTreeSubtreeUtils {
 	 * @param tree the tree
 	 * @param node the external leaf node to start the remove process with
 	 */
-	public void removeSingleChildInternalNode(Tree tree, Node node) {
+	public void removeSingleChildInternalNode(Tree tree, Node node)  throws Exception{
 		Node parent,parparent;
 		int i;
 		

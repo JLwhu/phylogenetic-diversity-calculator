@@ -22,7 +22,7 @@ public class TreeUtilsAdded {
 	 * @param tree the tree
 	 * @return diversity diversity of the tree
 	 */
-	public static double computeDiversity(Tree tree) {
+	public static double computeDiversity(Tree tree) throws Exception{
 		double div = 0;
 		
 		Node node = tree.getRoot();
