@@ -138,6 +138,27 @@ public class TreeUtilsMore {
 	}
 	
 	/**
+	 * returns the set of internal nodes Set A and B.
+	 *
+	 * @param Set<Node> A
+	 * @return the common node number under node
+	 */
+	public static Set getInternalNodeIDSet(Set<Node> A){
+		Set<Integer> internaleNodeSetA = new HashSet<Integer>();
+		
+		Iterator it = A.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			while (!node.isRoot()){
+				node = node.getParent();
+				internaleNodeSetA.add(node.getNumber());
+			}
+		}		
+
+		return internaleNodeSetA;
+	}
+	
+	/**
 	 * returns the number of nodes of set under node.
 	 *
 	 * @param tree the tree

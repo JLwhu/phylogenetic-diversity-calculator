@@ -62,16 +62,46 @@ public class PhyloSorDistance extends CommunityDiversityDistanceStrategy{
 				if (anum > 0 && bnum > 0)
 					intersectSum += node.getBranchLength();
 			}
-		}*/
-
+		}
 		
-		SimpleTree subtreeA = (SimpleTree) rtsu.getSpecifiedSubTree(
+				SimpleTree subtreeA = (SimpleTree) rtsu.getSpecifiedSubTree(
 				this.getPhylogeneticTree(), A);
-		SimpleTree subtreeB = (SimpleTree) rtsu.getSpecifiedSubTree(
+				SimpleTree subtreeB = (SimpleTree) rtsu.getSpecifiedSubTree(
 				this.getPhylogeneticTree(), B);
-		double sumA = TreeUtilsMore.getBrachlengthSum(subtreeA);
-		double sumB = TreeUtilsMore.getBrachlengthSum(subtreeB);
+				
+				double sumA = TreeUtilsMore.getBrachlengthSum(subtreeA);
+				double sumB = TreeUtilsMore.getBrachlengthSum(subtreeB);
+		
+		*/
 
+		double sumA = 0;
+		double sumB = 0;
+
+		Set internalNodesA = TreeUtilsMore.getInternalNodeIDSet(nodesetA);
+		Set internalNodesB = TreeUtilsMore.getInternalNodeIDSet(nodesetB);
+		it = internalNodesA.iterator();
+		while(it.hasNext()){
+			Integer nodeID = (Integer) it.next();
+			Node node = tree.getInternalNode(nodeID.intValue());
+			sumA+=node.getBranchLength();
+		}
+		it = nodesetA.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			sumA+=node.getBranchLength();
+		}
+
+		it = internalNodesB.iterator();
+		while(it.hasNext()){
+			Integer nodeID = (Integer) it.next();
+			Node node = tree.getInternalNode(nodeID.intValue());
+			sumB+=node.getBranchLength();
+		}
+		it = nodesetB.iterator();
+		while(it.hasNext()){
+			Node node = (Node) it.next();
+			sumB+=node.getBranchLength();
+		}
 		return 2 * intersectSum / (sumA + sumB);
 
 	}
