@@ -23,17 +23,17 @@ public class speciesNameFormatUtils {
 			int loc = temp.indexOf("-");
 			int locblk = temp.substring(0, loc - 1).indexOf(" ");
 			if (locblk > 0)
-				subComNl.add(temp.substring(0, locblk).toLowerCase() + "_"
-						+ temp.substring(locblk + 1, loc - 1).toLowerCase());
+				subComNl.add(temp.substring(0, locblk) + "_"
+						+ temp.substring(locblk + 1, loc - 1));
 			else
-				subComNl.add(temp.substring(0, loc - 1).toLowerCase());
+				subComNl.add(temp.substring(0, loc - 1));
 			locblk = 0;
 			locblk = temp.substring(loc + 2).indexOf(" ");
 			if (locblk > 0)
-				subSciNl.add(temp.substring(loc + 2, loc + 2 + locblk).toLowerCase() + "_"
-						+ temp.substring(loc + 2 + locblk + 1).toLowerCase());
+				subSciNl.add(temp.substring(loc + 2, loc + 2 + locblk) + "_"
+						+ temp.substring(loc + 2 + locblk + 1));
 			else
-				subSciNl.add(temp.substring(loc + 2).toLowerCase());
+				subSciNl.add(temp.substring(loc + 2));
 			loc = 0;
 			locblk = 0;
 			i++;
@@ -45,7 +45,7 @@ public class speciesNameFormatUtils {
 		for (int i =0;i< nameList.size();i++){
 			String name = (String) nameList.get(i);
 			name = name.replaceAll(" ", "_");
-			retList.add(name.toLowerCase());
+			retList.add(name);
 		}
 		return retList;
 	}
