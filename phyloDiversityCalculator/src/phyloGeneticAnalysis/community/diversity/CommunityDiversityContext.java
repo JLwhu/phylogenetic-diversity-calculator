@@ -12,11 +12,11 @@ public class CommunityDiversityContext {
 	public CommunityDiversityContext(CommunityDiversityDistanceStrategy strategy){
 		this.strategy = strategy;
 	}
-	public double communityDiversity(Set A, Set B){
+	public double communityDiversity(Set A, Set B) throws Exception{
 		return strategy.distance(A, B);
 	}
 	
-	public double communityDiversity(Set A, Set B, HashMap abundanceMap){
+	public double communityDiversity(Set A, Set B, HashMap abundanceMap) throws Exception{
 		return strategy.distance(A, B, abundanceMap);
 	}
 	

@@ -91,40 +91,38 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	public UnifracDistance(Tree phylotree) {
 		super(phylotree);
 	}
-	
-	public void setOption(int option){
+
+	public void setOption(int option) {
 		this.option = option;
 	}
-	
-	public void setAlpha(double alpha){
+
+	public void setAlpha(double alpha) {
 		this.alpha = alpha;
 	}
 
-	
-
 	@Override
 	public double distance(Set<String> A, Set<String> B, HashMap abundanceMap) {
-		
+
 		Tree tree = this.getPhylogeneticTree();
 
 		Instance instanceA = getInstanceFromNodeNameSet(tree, A, abundanceMap);
 		Instance instanceB = getInstanceFromNodeNameSet(tree, B, abundanceMap);
-		
+
 		boolean isANonEmpty = false;
 		boolean isBNonEmpty = false;
-		for (int i=0;i<instanceA.numAttributes();i++){
-			if (instanceA.value(i)>0){
+		for (int i = 0; i < instanceA.numAttributes(); i++) {
+			if (instanceA.value(i) > 0) {
 				isANonEmpty = true;
 				break;
 			}
 		}
-		for (int i=0;i<instanceB.numAttributes();i++){
-			if (instanceB.value(i)>0){
+		for (int i = 0; i < instanceB.numAttributes(); i++) {
+			if (instanceB.value(i) > 0) {
 				isBNonEmpty = true;
 				break;
 			}
 		}
-		
+
 		if (!isANonEmpty || !isBNonEmpty)
 			return 0;
 
@@ -134,7 +132,7 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 
 		return unifrac;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -145,8 +143,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	@Override
 	public double distance(Set<String> A, Set<String> B) {
 		Tree tree = this.getPhylogeneticTree();
-		
-		if(A.isEmpty()||B.isEmpty())
+
+		if (A.isEmpty() || B.isEmpty())
 			return 0;
 
 		Instance instanceA = getInstanceFromNodeNameSet(tree, A);
@@ -168,67 +166,64 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 */
 	@Override
 	public double distance(Instance first, Instance second) {
-		
+
 		boolean isANonEmpty = false;
 		boolean isBNonEmpty = false;
-		for (int i=0;i<first.numAttributes();i++){
-			if (first.value(i)>0){
+		for (int i = 0; i < first.numAttributes(); i++) {
+			if (first.value(i) > 0) {
 				isANonEmpty = true;
 				break;
 			}
 		}
-		for (int i=0;i<second.numAttributes();i++){
-			if (second.value(i)>0){
+		for (int i = 0; i < second.numAttributes(); i++) {
+			if (second.value(i) > 0) {
 				isBNonEmpty = true;
 				break;
 			}
 		}
-		
+
 		if (!isANonEmpty || !isBNonEmpty)
 			return 0;
 		
-		Tree tree = this.getPhylogeneticTree();
-
-		double expectBound = 1;
-		if (expectedValueAdjust) {
-			expectBound = calculateExpectedBound(first, second);
-			// System.out.println(expectBound);
-		}
 		double unifrac = 0;
-	//	if (distanceMap.get(first) == null && distanceMap.get(second) == null) {
+		try {
+			Tree tree = this.getPhylogeneticTree();
+
+			double expectBound = 1;
+			if (expectedValueAdjust) {
+
+				expectBound = calculateExpectedBound(first, second);
+
+				// System.out.println(expectBound);
+			}
+
+			// if (distanceMap.get(first) == null && distanceMap.get(second) ==
+			// null) {
 			unifrac = getTreeUnifrac(tree, first, second, option);
 			// unifrac = 1;
 			if (expectedValueAdjust)
 				unifrac /= expectBound;
-	//		HashMap instanceMap = new HashMap();
-	//		instanceMap.put(second, unifrac);
-	//		distanceMap.put(first, instanceMap);
-/*		} else if (distanceMap.get(first) != null) {
-			HashMap instanceMap = (HashMap) distanceMap.get(first);
-			if (instanceMap.get(second) != null)
-				unifrac = (double) instanceMap.get(second);
-			// unifrac = 1;
-			else {
-				unifrac = getTreeUnifrac(tree, first, second, option);
-				// unifrac = 1;
-				if (expectedValueAdjust)
-					unifrac /= expectBound;
-				instanceMap.put(second, unifrac);
-			}
-		} else if (distanceMap.get(second) != null) {
-			HashMap instanceMap = (HashMap) distanceMap.get(second);
-			if (instanceMap.get(first) != null)
-				unifrac = (double) instanceMap.get(first);
-			// unifrac = 1;
-			else {
-				unifrac = getTreeUnifrac(tree, first, second, option);
-				// unifrac = 1;
-				if (expectedValueAdjust)
-					unifrac /= expectBound;
-				instanceMap.put(first, unifrac);
-			}
+			// HashMap instanceMap = new HashMap();
+			// instanceMap.put(second, unifrac);
+			// distanceMap.put(first, instanceMap);
+			/*
+			 * } else if (distanceMap.get(first) != null) { HashMap instanceMap
+			 * = (HashMap) distanceMap.get(first); if (instanceMap.get(second)
+			 * != null) unifrac = (double) instanceMap.get(second); // unifrac =
+			 * 1; else { unifrac = getTreeUnifrac(tree, first, second, option);
+			 * // unifrac = 1; if (expectedValueAdjust) unifrac /= expectBound;
+			 * instanceMap.put(second, unifrac); } } else if
+			 * (distanceMap.get(second) != null) { HashMap instanceMap =
+			 * (HashMap) distanceMap.get(second); if (instanceMap.get(first) !=
+			 * null) unifrac = (double) instanceMap.get(first); // unifrac = 1;
+			 * else { unifrac = getTreeUnifrac(tree, first, second, option); //
+			 * unifrac = 1; if (expectedValueAdjust) unifrac /= expectBound;
+			 * instanceMap.put(first, unifrac); } }
+			 */
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-*/
 		return unifrac;
 	}
 
@@ -246,7 +241,7 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 * @return the tree unifrac
 	 */
 	private double getTreeUnifrac(Tree tree, Instance instanceA,
-			Instance instanceB, int option) {
+			Instance instanceB, int option) throws Exception {
 		// long time = 0;
 		// time = System.currentTimeMillis();
 
@@ -342,7 +337,7 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 *            the instance b
 	 */
 	private void populateLabels(Tree tree, Instance instanceA,
-			Instance instanceB) {
+			Instance instanceB) throws Exception {
 		int internalCount = tree.getInternalNodeCount();
 		int externalCount = tree.getExternalNodeCount();
 		Node root = tree.getRoot();
@@ -417,7 +412,7 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 *            the instance b
 	 */
 	private void deleteRedundentTree(Tree tree, Instance instanceA,
-			Instance instanceB) {
+			Instance instanceB) throws Exception {
 		int internalCount = tree.getInternalNodeCount();
 		int externalCount = tree.getExternalNodeCount();
 		Node root = tree.getRoot();
@@ -470,7 +465,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 * @param instanceB
 	 *            the instance b
 	 */
-	private void preProcess(Tree tree, Instance instanceA, Instance instanceB) {
+	private void preProcess(Tree tree, Instance instanceA, Instance instanceB)
+			throws Exception {
 		populateLabels(tree, instanceA, instanceB);
 		deleteRedundentTree(tree, instanceA, instanceB);
 	}
@@ -484,7 +480,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 *            the second
 	 * @return the expected bound
 	 */
-	private double calculateExpectedBound(Instance first, Instance second) {
+	private double calculateExpectedBound(Instance first, Instance second)
+			throws Exception {
 		IntersectionExpectedProb iep = new IntersectionExpectedProb();
 		int unionSize = InstanceSetUtils.getUnionSize(first, second);
 		int smallSetSize = InstanceSetUtils.getNonZeroValuesNum(first);
@@ -517,8 +514,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 			funcValues[i] = i;
 		}
 		double normalizer = iep.expectedProb(first, second, funcValues);
-		expectBound/=(2*unionSize -1);
-	//	expectBound /= normalizer;
+		expectBound /= (2 * unionSize - 1);
+		// expectBound /= normalizer;
 
 		return expectBound;
 	}
@@ -532,7 +529,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 *            the second
 	 * @return the ordered branches sum
 	 */
-	private double[] getOrderedBranchesSum(Instance first, Instance second) {
+	private double[] getOrderedBranchesSum(Instance first, Instance second)
+			throws Exception {
 		Tree tree = this.getPhylogeneticTree();
 		double[] branches = TreeUtilsMore.getSortedBranchWeight(tree);
 		double[] sums = new double[branches.length];
@@ -553,7 +551,8 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 	 *            the second
 	 * @return the random order branches sum
 	 */
-	private double[] getRandomOrderBranchesSum(Instance first, Instance second) {
+	private double[] getRandomOrderBranchesSum(Instance first, Instance second)
+			throws Exception {
 		Tree tree = this.getPhylogeneticTree();
 		double[] branches = TreeUtilsMore.getBranchWeight(tree);
 		List branchWeightList = new ArrayList();
@@ -573,29 +572,30 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 		}
 		return sums;
 	}
-	
-	//@Override
-	public double distance1(Instance first, Instance second){//zscoreDistance
-		
+
+	// @Override
+	public double distance1(Instance first, Instance second) throws Exception {// zscoreDistance
+
 		boolean isANonEmpty = false;
 		boolean isBNonEmpty = false;
-		for (int i=0;i<first.numAttributes();i++){
-			if (first.value(i)>0){
+		for (int i = 0; i < first.numAttributes(); i++) {
+			if (first.value(i) > 0) {
 				isANonEmpty = true;
 				break;
 			}
 		}
-		for (int i=0;i<second.numAttributes();i++){
-			if (second.value(i)>0){
+		for (int i = 0; i < second.numAttributes(); i++) {
+			if (second.value(i) > 0) {
 				isBNonEmpty = true;
 				break;
 			}
 		}
-		
+
 		if (!isANonEmpty || !isBNonEmpty)
 			return 0;
-		
-		double distance = distance1(first, second);;
+
+		double distance = distance1(first, second);
+		;
 		double mean = 0;
 		double std = 0;
 		double[] distanceVec = new double[this.numIteration];
@@ -603,41 +603,43 @@ public class UnifracDistance extends CommunityDiversityDistanceStrategy {
 		Instance copySecond = new Instance(second);
 		long seed = System.nanoTime();
 		Random random = new Random(seed);
-		for (int i=0;i<this.numIteration;i++){
+		for (int i = 0; i < this.numIteration; i++) {
 			shuffleInstance(copyFirst, random);
 			shuffleInstance(copySecond, random);
-			distanceVec[i]=distance1(copyFirst, copySecond);
-	//		System.out.println(distanceVec[i]);
+			distanceVec[i] = distance1(copyFirst, copySecond);
+			// System.out.println(distanceVec[i]);
 		}
-		for (int i=0;i<this.numIteration;i++){
-			mean+=distanceVec[i];
+		for (int i = 0; i < this.numIteration; i++) {
+			mean += distanceVec[i];
 		}
-		mean/=this.numIteration;
-	//	System.out.println(distance);
-	//	System.out.println(mean);
-		for (int i=0;i<this.numIteration;i++){
-			std+=Math.pow(distanceVec[i]-mean, 2);
+		mean /= this.numIteration;
+		// System.out.println(distance);
+		// System.out.println(mean);
+		for (int i = 0; i < this.numIteration; i++) {
+			std += Math.pow(distanceVec[i] - mean, 2);
 		}
-		std/=this.numIteration;
+		std /= this.numIteration;
 		std = Math.sqrt(std);
-	//	System.out.println(std);
-		System.out.println((distance-mean)/std);
-		return (distance-mean)/std;
+		// System.out.println(std);
+		System.out.println((distance - mean) / std);
+		return (distance - mean) / std;
 	}
 
-	private void shuffleInstance(Instance instance, Random random){
+	private void shuffleInstance(Instance instance, Random random)
+			throws Exception {
 		List list = new ArrayList();
-		for (int j=0;j<instance.numValues();j++){
-			if (instance.value(j)!=0)
+		for (int j = 0; j < instance.numValues(); j++) {
+			if (instance.value(j) != 0)
 				list.add(instance.value(j));
 		}
-		Collections.shuffle(list,random);	
-	//	System.out.println(list.size());
-		for (int j=0;j<instance.numValues();j++){
+		Collections.shuffle(list, random);
+		// System.out.println(list.size());
+		for (int j = 0; j < instance.numValues(); j++) {
 			instance.setValue(j, 0);
 		}
-		for (int j=0;j<list.size();j++){
-			int pos = (int) Math.round(random.nextDouble()*(instance.numValues()-1));
+		for (int j = 0; j < list.size(); j++) {
+			int pos = (int) Math.round(random.nextDouble()
+					* (instance.numValues() - 1));
 			instance.setValue(pos, ((Double) list.get(j)).doubleValue());
 		}
 	}
