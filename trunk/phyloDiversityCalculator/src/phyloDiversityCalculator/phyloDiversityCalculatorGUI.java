@@ -267,7 +267,7 @@ public class phyloDiversityCalculatorGUI extends javax.swing.JFrame{
 		rdbtnNormWeightedUnifrac.setSelected(true);
 		outputMetricsButtonGroup.add(rdbtnNormWeightedUnifrac);
 
-		rdbtnVAWUnifrac = new JRadioButton("VAW-UniFrac distance dVAW");
+		rdbtnVAWUnifrac = new JRadioButton("VAW-Unifrac distance dVAW");
 		rdbtnVAWUnifrac.setBounds(6, 49, 235, 28);
 		panel_Step2.add(rdbtnVAWUnifrac);
 		rdbtnVAWUnifrac.setSelected(true);
